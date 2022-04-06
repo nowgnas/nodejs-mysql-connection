@@ -19,7 +19,21 @@ const getAllData = async ({ tableName }) => {
     await connection.commit();
     connection.release();
     return rows;
-  } catch (error) {}
+  } catch (error) {
+    // 테이블이 존재하지 않을 경우 테이블 생성 -> 아래와 같음 : 하나의 함수로 만들어서 사용하면 될 것 같아요
+    if (error.sqlMessage.includes("doesn't exist")) {
+      const connection = await pool.getConnection(async (conn) => conn);
+      const sql = `create table User(
+        id int, 
+        name varchar(30)
+      )`;
+
+      await connection.beginTransaction();
+      await connection.query(sql);
+      await connection.commit();
+      connection.release();
+    }
+  }
 };
 
 //  테이블에 데이터 추가
@@ -35,7 +49,20 @@ const insertData = async ({ tableName, id, name }) => {
     await connection.commit();
     connection.release();
     return rows;
-  } catch (error) {}
+  } catch (error) {
+    if (error.sqlMessage.includes("doesn't exist")) {
+      const connection = await pool.getConnection(async (conn) => conn);
+      const sql = `create table User(
+        id int, 
+        name varchar(30)
+      )`;
+
+      await connection.beginTransaction();
+      await connection.query(sql);
+      await connection.commit();
+      connection.release();
+    }
+  }
 };
 
 // sql 쿼리를 export

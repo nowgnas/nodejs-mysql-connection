@@ -16,8 +16,7 @@ userRouter.get("/", async (req, res) => {
   const tableName = "User";
   const data = await userService.showAllData({ tableName });
 
-  console.log("---this is router----");
-  console.log(data);
+  res.status(200).json(data);
 });
 
 // 테이블에 데이터 추가하기
