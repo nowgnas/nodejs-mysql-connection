@@ -23,7 +23,7 @@ userRouter.get("/", async (req, res) => {
 userRouter.post("/insert/:id", async (req, res) => {
   const tableName = "User";
   const name = req.params.id;
-  const insertedData = await userService.insert({ tableName, name });
+  const insertedData = await userService.insertData({ tableName, name });
   res.json(insertedData);
 });
 
